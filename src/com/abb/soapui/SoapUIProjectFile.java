@@ -33,7 +33,7 @@ public class SoapUIProjectFile {
 		
 		// Validate the root directory specified
 		if(propertiesPathname == null) {
-			propertiesPathname = File.separator + Configuration.defaultPropertiesFileName;
+			propertiesPathname = Configuration.defaultPropertiesFileName;
 		}
 		File propertiesFile = new File(propertiesPathname);
 		if(!propertiesFile.isFile()) {
