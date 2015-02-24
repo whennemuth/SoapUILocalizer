@@ -244,12 +244,12 @@ public class SoapUIProjectFile {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		String rootDirPath = null;
+		String propertiesFilePathName = null;
 		
 		if(args.length > 0) {
-			rootDirPath = args[0].trim();
+			propertiesFilePathName = args[0].trim();
 		}
 		
-		SoapUIProjectFile.processFiles(rootDirPath);
+		SoapUIProjectFile.processFiles(propertiesFilePathName);
 	}
 }
