@@ -1,0 +1,1 @@
+jar cvfe SoapUILocalizer.jar com/abb/soapui/SoapUIProjectFile -C bin com
