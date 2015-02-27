@@ -281,7 +281,7 @@ public class SoapUIProjectFile {
 			propertiesFilePathName = args[0].trim();
 		}
 		
-//		SoapUIProjectFile.processFiles(propertiesFilePathName);
-		SoapUIProjectFile.processFiles("C:\\whennemuth\\documentation\\abb\\soapui\\SoapUILocalizer.properties");
+		SoapUIProjectFile.processFiles(propertiesFilePathName);
+		//SoapUIProjectFile.processFiles("C:\\whennemuth\\documentation\\abb\\soapui\\SoapUILocalizer.properties");
 	}
 }
