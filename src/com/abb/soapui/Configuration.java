@@ -16,6 +16,7 @@ public class Configuration {
 
 	public static String defaultPropertiesFileName = "SoapUILocalizer.properties";
 	private String rootDirectory;
+	private String targetDirectory;
 	private LinkedHashSet<String> findList = new LinkedHashSet<String>();
 	private LinkedHashSet<String> regexFindList = new LinkedHashSet<String>();
 	private List<String> replaceList = new ArrayList<String>();
@@ -49,6 +50,23 @@ public class Configuration {
 	private void initialize(InputStream input) {
 		try {
 			props.load(input);
+			
+			getFindList();
+			getRegexFindList();
+			getReplaceList();
+			getRegexReplaceList();
+			
+			if(findList.size() != replaceList.size()) {
+				System.out.println("The number of find expressions is not equal to the number of replace expressions!");
+				initialized = false;
+				return;
+			}
+			
+			if(regexFindList.size() != regexReplaceList.size()) {
+				System.out.println("The number of find regular expressions is not equal to the number of replace regular expressions!");
+				initialized = false;
+				return;
+			}
 		} 
 		catch (IOException e) {
 			e.printStackTrace(System.out);
@@ -67,13 +85,24 @@ public class Configuration {
 		}
 		return rootDirectory;
 	}
+	public String getTargetDirectory() {
+		if(targetDirectory == null) {
+			targetDirectory = props.getProperty("TargetDirectory");
+			if(targetDirectory != null) {
+				if(!targetDirectory.endsWith(File.separator)) {
+					targetDirectory += File.separator;
+				}
+			}
+		}
+		return targetDirectory;
+	}
 	public LinkedHashSet<String> getFindList() {
 		if(findList.isEmpty()) {
 			for(int i=1; i<=100; i++) {
 				String prop = props.getProperty("find" + String.valueOf(i));
 				if(prop != null) {
 					prop = prop.trim();
-					if(prop.length() > 0 && !findList.contains(prop))
+					if(prop.length() > 0)
 						findList.add(prop.trim());
 				}
 			}
@@ -86,7 +115,7 @@ public class Configuration {
 				String prop = props.getProperty("findRegex" + String.valueOf(i));
 				if(prop != null) {
 					prop = prop.trim();
-					if(prop.length() > 0 && !regexFindList.contains(prop))
+					if(prop.length() > 0)
 						regexFindList.add(prop.trim());
 				}
 			}
@@ -99,7 +128,7 @@ public class Configuration {
 				String prop = props.getProperty("replace" + String.valueOf(i));
 				if(prop != null) {
 					prop = prop.trim();
-					if(prop.length() > 0 && !replaceList.contains(prop))
+					if(prop.length() > 0)
 						replaceList.add(prop.trim());
 				}
 			}
@@ -112,7 +141,7 @@ public class Configuration {
 				String prop = props.getProperty("replaceRegex" + String.valueOf(i));
 				if(prop != null) {
 					prop = prop.trim();
-					if(prop.length() > 0 && !regexReplaceList.contains(prop))
+					if(prop.length() > 0)
 						regexReplaceList.add(prop.trim());
 				}
 			}
@@ -140,6 +169,7 @@ public class Configuration {
 		return initialized;
 	}
 
+	
 	public File getPropertiesFile() {
 		return propertiesFile;
 	}

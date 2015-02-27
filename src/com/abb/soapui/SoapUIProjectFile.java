@@ -59,6 +59,17 @@ public class SoapUIProjectFile {
 		dotGitIgnore.processConfiguration(config);
 
 		File dir = new File(config.getRootDirectory());
+		
+		if(!dir.isDirectory()) {
+			System.out.println("Root directory cannot be found: " + config.getRootDirectory());
+			return;
+		}
+		
+		if(!(new File(config.getTargetDirectory())).isDirectory() && !isEmpty(config.getTargetDirectory())) {
+			System.out.println("Target directory cannot be found: " + config.getTargetDirectory());
+			return;
+		}
+		
 		if(dir.isDirectory()) {
 			File[] filesToProcess = dir.listFiles(new FileFilter(){
 				@Override public boolean accept(File f) {
@@ -179,9 +190,21 @@ public class SoapUIProjectFile {
 	 */
 	private File getFileToWrite(String localSuffix) {
 		File local = null;
-		String pathname = projectFile.getAbsolutePath();
-		String[] parts = pathname.split("\\.xml");
-		pathname = parts[0] + localSuffix + ".xml";
+		String pathname = null;
+		
+		if(!isEmpty(config.getTargetDirectory())) {
+			String targetDir = config.getTargetDirectory();
+			if(!targetDir.endsWith(File.separator))
+				targetDir += File.separator;			
+			String[] parts = projectFile.getName().split("\\.xml");			
+			pathname = targetDir + parts[0] + localSuffix + ".xml";
+		}
+		else {
+			pathname = projectFile.getAbsolutePath();
+			String[] parts = pathname.split("\\.xml");
+			pathname = parts[0] + localSuffix + ".xml";
+		}
+		
 		local = new File(pathname);
 		
 		if(config.isOverwriteExisting()) {
@@ -243,6 +266,14 @@ public class SoapUIProjectFile {
 		}
 	}
 	
+	public static boolean isEmpty(String s) {
+		if(s == null)
+			return true;
+		if(String.valueOf(s).trim().length() == 0)
+			return true;
+		return false;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		String propertiesFilePathName = null;
 		
@@ -250,6 +281,7 @@ public class SoapUIProjectFile {
 			propertiesFilePathName = args[0].trim();
 		}
 		
-		SoapUIProjectFile.processFiles(propertiesFilePathName);
+//		SoapUIProjectFile.processFiles(propertiesFilePathName);
+		SoapUIProjectFile.processFiles("C:\\whennemuth\\documentation\\abb\\soapui\\SoapUILocalizer.properties");
 	}
 }
